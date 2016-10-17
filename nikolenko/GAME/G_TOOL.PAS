@@ -90,6 +90,9 @@ IMPLEMENTATION
 uses
   crt, windows;
 
+var
+  g_HConsole: LongWord;
+
 function getx(x:byte; dir:tdir):byte;
 begin
 case dir of dup,ddown,dnull,dhere: getx:=x;
@@ -196,18 +199,35 @@ end;
 procedure charxy(ch_,cl_,bcl_,x,y: byte);
 var
   oldx,oldy: byte;
+  coords: COORD;
 begin
 
 //FillConsoleOutputCharacter
 //FillConsoleOutputAttribute 
 
-  oldx:=wherex();
-  oldy:=wherey();
-  textcolor(cl_);
-  textbackground(bcl_);
-  gotoxy(x+1,y+1);
-  write(ch_);
-  gotoxy(oldx,oldy);
+  // oldx:=wherex();
+  // oldy:=wherey();
+  // textcolor(cl_);
+  // textbackground(bcl_);
+  // gotoxy(x,y+2);
+  // write(chr(ch_));
+  // gotoxy(oldx,oldy);
+
+  coords.x :=x-1;
+  coords.y :=y+2;
+  FillConsoleOutputCharacter(
+    g_HConsole,
+    chr(ch_), 1,
+    coords,
+    nil
+    );
+
+  FillConsoleOutputAttribute(
+    g_HConsole,
+    cl_ or (bcl_ shl 4), 1,
+    coords,
+    nil
+    );
 
 {
 asm
@@ -258,8 +278,21 @@ end;
 
 
 procedure mark(x,y:byte);
-label a,b;
+//label a,b;
+var
+  coords: COORD;
 begin
+
+  coords.x := x-1;
+  coords.y := y;
+
+  FillConsoleOutputAttribute(
+    g_HConsole,
+    0 or (7 shl 4), 1,
+    coords,
+    nil
+    );
+
   {
 asm
 push ax
@@ -311,8 +344,19 @@ end;
 
 
 procedure unmark(x,y:byte);
-label a,b;
+//label a,b;
+var
+  coords: COORD;
 begin
+  coords.x := x-1;
+  coords.y := y;
+
+  FillConsoleOutputAttribute(
+    g_HConsole,
+    7, 1,
+    coords,
+    nil
+    );
   {
 asm
 push ax
@@ -361,4 +405,7 @@ end;
 end;
 
 
+begin
+SetconsoleOutPutCP(1251);
+g_HConsole := GetStdHandle(STD_OUTPUT_HANDLE);
 END.

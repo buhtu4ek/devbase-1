@@ -1911,14 +1911,21 @@ var k,k1: byte;
 begin
 mp_index:=maze.index;
 st_index:=maze.stairsdown[_index].stairindex;
-if maze.stairsdown[_index].mapindex<>maze.index             (*if stairs lead to other map*)
+// writeln('_index=',_index);
+// writeln('MAZE_INDEX=',maze.index);
+// writeln('mapindex=',maze.stairsdown[_index].mapindex,'ST=',st_index);
+// writeln(maze.stairsdown[_index].mapindex<>maze.index);readkey;
+if (maze.stairsdown[_index].mapindex<>maze.index)            (*if stairs lead to other map*)
 then
   begin
+  writeln('Other MAP');readkey;
   ena:=false;
   maze.save;
   maze.SaveQMonsters(hero.pmbegin);
   hero.mapindex:=maze.stairsdown[_index].mapindex;
+  //writeln('Loading map N ', maze.stairsdown[_index].mapindex);readkey;
   maze.load(maze.stairsdown[_index].mapindex);              (* load other map*)
+  //writeln('maze.cell[1,1].value =', maze.cell[1,1].value);readkey;
   if maze.cell[1,1].value=ctdooro
   then
     begin

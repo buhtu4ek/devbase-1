@@ -334,10 +334,6 @@ case random(6) of
 end;
 
 
-
-
-
-
 (*-----Write POINT to screen--------*)
 procedure TMaze.WriteMP(x,y:byte;ViewZos: boolean);
 var bcol,col,byt: byte;
@@ -380,7 +376,7 @@ case value of
 
                end;
 
-     CTwall :  begin  (*draw wall*)
+     CTwall :  begin  (*draw wall*)               
                case (walltype shr 5) of
                  0: col:=lightgreen;
                  1: col:= 6;
@@ -584,15 +580,16 @@ end;
 
 (*draw maze*)
 procedure TMaze.Draw;
-var n,n1:byte;
+var
+  w,h:byte;
 begin
-for n:=1 to ScrW do
-  for n1:=1 to ScrH do
-    if cell[n,n1].visible
+for w:=1 to ScrW do
+  for h:=1 to ScrH do
+    if cell[w,h].visible
     then
-      WriteMP(n,n1,false)
+      WriteMP(w,h,false)
     else
-      charxy(0,0,0,n,n1);
+      charxy(0,0,0,w,h);
 end;
 
 

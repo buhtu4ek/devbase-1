@@ -556,11 +556,6 @@ case ch of
            messagetoscreen(true,'Done filling file');
            end;
 
-      's': begin            (*--save--*)
-           write('Saved in ',' file slot. Press any key.');
-           readcommand;
-
-           end;
       '-': with rec do
            begin
            case y of
